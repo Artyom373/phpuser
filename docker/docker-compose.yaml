@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+
+  php:
+    build: ../docker
+  #  image: php
+    ports:
+      - '8080:8080'
+    command:
+      "php -S 0.0.0.0:8080"
+    volumes:
+      - ../:/app
+      - ../xdebug/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ../php-ini:/usr/local/etc/php/custom.d
+    environment:
+        PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
+
+    working_dir: /app
+
+  postgres:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgresuser
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+volumes:
+  pgdata:
+
+
+
